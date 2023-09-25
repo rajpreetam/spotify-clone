@@ -1,12 +1,15 @@
-import React from 'react';
-import { Text, View } from '../../components/Themed';
+import { FlatList } from 'react-native';
+import { tracks } from '../../assets/data/tracks';
+import TrackListItem from '../../components/TrackListItem';
 
-const favouritesScreen = () => {
+const FavouritesScreen = () => {
   return (
-    <View>
-      <Text>favourites</Text>
-    </View>
+    <FlatList
+      data={tracks}
+      renderItem={({ item }) => <TrackListItem track={item} />}
+      showsVerticalScrollIndicator={false}
+    />
   );
 };
 
-export default favouritesScreen;
+export default FavouritesScreen;
