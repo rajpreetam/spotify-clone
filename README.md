@@ -2,7 +2,7 @@
 
 Created using Expo React Native
 
-## Text app on your android device
+## Test app on your android device
 
 1. Scan the QR Code to download the app:  
    ![QR Code](https://raw.githubusercontent.com/rajpreetam/spotify-clone/main/src/assets/images/app_qrcode.png)
