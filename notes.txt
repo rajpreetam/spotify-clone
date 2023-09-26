@@ -1,0 +1,49 @@
+id: 52f4a6d2ceb042b0910886358f66d2ee
+secret: 45bc84131fb84a4986d8da1a19c05a58
+
+curl -X POST "https://accounts.spotify.com/api/token" \
+	-H "Content-Type: application/x-www-form-urlencoded" \
+	-d "grant_type=client_credentials&client_id=your-client-id&client_secret=your-client-secret"
+
+
+{
+	"access_token":"BQA8AzdkefAZmSwYJy-U9-BC9dparMPI9AF7b3i2IIjxYNOffhA0zcC5BtuzIj9RJKNrjusdko7Arzq9Z5jDGkh_08I7gspqV-jr5Tp3Fc2Y3tUAfjw",
+	"token_type":"Bearer",
+	"expires_in":3600
+}
+
+curl "https://api.spotify.com/v1/artists/4Z8W4fKeB5YxbusRsdQVPb" \
+  -H "Authorization: Bearer  BQA8AzdkefAZmSwYJy-U9-BC9dparMPI9AF7b3i2IIjxYNOffhA0zcC5BtuzIj9RJKNrjusdko7Arzq9Z5jDGkh_08I7gspqV-jr5Tp3Fc2Y3tUAfjw"
+
+stepzen import \
+	curl "https://api.spotify.com/v1/recommendations?seed_genres=classical" \
+	--header "Authorization: Bearer BQA8AzdkefAZmSwYJy-U9-BC9dparMPI9AF7b3i2IIjxYNOffhA0zcC5BtuzIj9RJKNrjusdko7Arzq9Z5jDGkh_08I7gspqV-jr5Tp3Fc2Y3tUAfjw" \
+	--query-name "recommendations" \
+	--query-type "Recommendations" \
+	--name "recommendations" \
+	--prefix "Recommend"
+
+stepzen import \
+	curl -X POST "https://accounts.spotify.com/api/token" \
+	-H "Content-Type: application/x-www-form-urlencoded" \
+	-d "grant_type=client_credentials&client_id=52f4a6d2ceb042b0910886358f66d2ee&client_secret=45bc84131fb84a4986d8da1a19c05a58" \
+	--query-name "getToken" \
+	--query-type "TokenResponse" \
+	--name "auth"
+
+stepzen import \
+	curl "https://api.spotify.com/v1/search?q=nahin%20ji%20nahin&type=track" \
+	-H "Authorization: Bearer BQBS6fD1FF5cX6NR_A7Pkbq5xuc-UVw3BWTUcVoYYsnGsUlUeeWQgMyMjVrrkHx8V_qCObkJQ28_3rDxitaMuKeeKuMy73zsFZYCSVmjToeoLiazJPY" \
+	--query-name "search" \
+	--query-type "SearchResult" \
+	--name "search" \
+	--prefix "Search"
+
+stepzen import \
+	curl "https://api.spotify.com/v1/tracks/5Hl63D1iByLLkGoG3jXn3n" \
+	-H "Authorization: Bearer BQBS6fD1FF5cX6NR_A7Pkbq5xuc-UVw3BWTUcVoYYsnGsUlUeeWQgMyMjVrrkHx8V_qCObkJQ28_3rDxitaMuKeeKuMy73zsFZYCSVmjToeoLiazJPY" \
+	--path-params "v1/tracks/\$trackId" \
+	--query-name "getTrack" \
+	--query-type "TrackResponse" \
+	--name "track" \
+	--prefix "Track"
