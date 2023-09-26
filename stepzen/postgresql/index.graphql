@@ -1,0 +1,83 @@
+type Favorites {
+  id: ID!
+  track_id: String
+  user_id: String
+
+  track: TrackResponse
+    @materializer(
+      query: "getTrack"
+      arguments: [{ name: "trackId", field: "track_id" }]
+    )
+}
+
+"""
+The following queries are just a set of examples of how to access your schema.
+Feel free to modify them or aggregate more.
+"""
+type Query {
+  " Queries for type 'Favorites' "
+  favoritesByTrack_id(track_id: String!): [Favorites]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "favorites"
+      configuration: "postgresql_config"
+    )
+  favoritesByTrack_idAndUser_id(
+    track_id: String!
+    user_id: String!
+  ): [Favorites]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "favorites"
+      configuration: "postgresql_config"
+    )
+  favoritesByUser_id(user_id: String!): [Favorites]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "favorites"
+      configuration: "postgresql_config"
+    )
+  favoritesList: [Favorites]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "favorites"
+      configuration: "postgresql_config"
+    )
+  favoritesPaginatedList(first: Int, after: Int): [Favorites]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "id", "track_id", "user_id" FROM "favorites" LIMIT $1 OFFSET $2
+      """
+      configuration: "postgresql_config"
+    )
+}
+
+"""
+The following mutations are just a set of examples of how to access your schema.
+Feel free to modify them or aggregate more.
+"""
+type Mutation {
+  " Mutations for type 'Favorites' "
+  deleteFavorites(track_id: String!, user_id: String!): Favorites
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "favorites"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+  insertFavorites(track_id: String, user_id: String): Favorites
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "favorites"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+}
