@@ -1,12 +1,12 @@
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { Image, StyleSheet } from 'react-native';
-import { tracks } from '../assets/data/tracks';
+import { useSelector } from 'react-redux';
+import { RootState } from '../features/store';
 import { Text, View } from './Themed';
 
-const track = tracks[0];
-
 const Player = () => {
+  const track = useSelector((state: RootState) => state.player.track);
   if (!track) return null;
 
   const image = track.album.images?.[0];

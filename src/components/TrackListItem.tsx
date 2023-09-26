@@ -1,5 +1,8 @@
 import React from 'react';
-import { Image, StyleSheet } from 'react-native';
+import { Image, Pressable, StyleSheet } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { setTrack } from '../features/playerSlice';
+import { AppDispatch } from '../features/store';
 import { Track } from '../types';
 import { Text, View } from './Themed';
 
@@ -8,8 +11,12 @@ type ITrackListItem = {
 };
 
 const TrackListItem: React.FC<ITrackListItem> = ({ track }) => {
+  const dispatch: AppDispatch = useDispatch();
   return (
-    <View style={styles.container}>
+    <Pressable
+      onPress={() => dispatch(setTrack(track))}
+      style={styles.container}
+    >
       <Image
         source={{ uri: track.album.images[0]?.url }}
         style={styles.image}
@@ -18,7 +25,7 @@ const TrackListItem: React.FC<ITrackListItem> = ({ track }) => {
         <Text style={styles.title}>{track.name}</Text>
         <Text style={styles.subTitle}>{track.artists[0]?.name}</Text>
       </View>
-    </View>
+    </Pressable>
   );
 };
 
