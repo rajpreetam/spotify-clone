@@ -1,15 +1,54 @@
+import { gql, useQuery } from '@apollo/client';
 import { FontAwesome } from '@expo/vector-icons';
 import { useState } from 'react';
-import { FlatList, StyleSheet, TextInput, useColorScheme } from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  StyleSheet,
+  TextInput,
+  useColorScheme,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { tracks } from '../../assets/data/tracks';
 import { Text, View } from '../../components/Themed';
 import TrackListItem from '../../components/TrackListItem';
 
+const query = gql`
+  query MyQuery($q: String!) {
+    search(q: $q) {
+      tracks {
+        items {
+          id
+          name
+          preview_url
+          artists {
+            id
+            name
+          }
+          album {
+            id
+            name
+            images {
+              height
+              url
+              width
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
 export default function SearchScreen() {
   const theme = useColorScheme();
-
   const [search, setSearch] = useState('');
+
+  const { data, loading, error } = useQuery(query, {
+    variables: { q: search },
+  });
+
+  const tracks = data?.search?.tracks?.items || [];
+
   return (
     <SafeAreaView>
       <View style={styles.header}>
@@ -26,6 +65,10 @@ export default function SearchScreen() {
         />
         <Text onPress={() => setSearch('')}>Cancel</Text>
       </View>
+
+      {loading && <ActivityIndicator />}
+      {error && <Text>Failed to load recommended tracks</Text>}
+
       <FlatList
         data={tracks}
         renderItem={({ item }) => <TrackListItem track={item} />}
